@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>es.lavanda</groupId>
-	<artifactId>torrent-check-job</artifactId>
+	<artifactId>torrent-checked-job</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>lavanda-torrent-check-job</name>
@@ -110,7 +110,7 @@
 						</platforms>
 					</from>
 					<to>
-						<image>registry-1.docker.io/lavandadelpatio/torrent-check-job</image>
+						<image>registry-1.docker.io/lavandadelpatio/torrent-checked-job</image>
 						<tags>
 							<tag>${project.version}</tag>
 							<tag>${project.version}-${TRIMMED_SHA}</tag>
