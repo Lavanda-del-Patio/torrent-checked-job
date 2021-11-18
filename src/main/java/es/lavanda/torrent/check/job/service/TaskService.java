@@ -38,22 +38,22 @@ public class TaskService implements CommandLineRunner {
     public void run(String... args) throws Exception {
         amazonSQS = AmazonSQSClientBuilder.standard().withRegion(awsRegion).build();
         final ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(queueUrl)
-                .withMaxNumberOfMessages(1).withWaitTimeSeconds(3);
+                .withMaxNumberOfMessages(10).withWaitTimeSeconds(3);
         final List<Message> messages = amazonSQS.receiveMessage(receiveMessageRequest).getMessages();
         for (Message messageObject : messages) {
             String message = messageObject.getBody();
             log.info("Received message: " + message);
             log.info("Reading message of the queue torrent-checked");
-        ObjectMapper mapper = new ObjectMapper();
-        TorrentCheckedResponse torrentChecked = new TorrentCheckedResponse();
-        try {
-            torrentChecked = mapper.readValue(message, TorrentCheckedResponse.class);
-        } catch (JsonProcessingException e) {
-            log.error("The message cannot convert to TorrentCheckedResponse", e);
-            throw new TorrentCheckJobException("The message cannot convert to TorrentCheckedResponse", e);
-        }
-        filmsServiceImpl.checkedTorrent(torrentChecked);
-        log.debug("Work message finished");
+            ObjectMapper mapper = new ObjectMapper();
+            TorrentCheckedResponse torrentChecked = new TorrentCheckedResponse();
+            try {
+                torrentChecked = mapper.readValue(message, TorrentCheckedResponse.class);
+            } catch (JsonProcessingException e) {
+                log.error("The message cannot convert to TorrentCheckedResponse", e);
+                throw new TorrentCheckJobException("The message cannot convert to TorrentCheckedResponse", e);
+            }
+            filmsServiceImpl.checkedTorrent(torrentChecked);
+            log.debug("Work message finished");
             log.info("Finish task, proceeding to delete message on queue");
             deleteMessage(messageObject);
         }
