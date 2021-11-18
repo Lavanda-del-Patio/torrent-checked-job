@@ -31,7 +31,7 @@ public class TaskService implements CommandLineRunner {
     @Value("${cloud.aws.region.static}")
     private String awsRegion;
 
-    @Value("https://sqs.eu-west-1.amazonaws.com/836783797541/torrent-check-${spring.profiles.active}")
+    @Value("https://sqs.eu-west-1.amazonaws.com/836783797541/torrent-checked-${spring.profiles.active}")
     private String queueUrl;
 
     @Override
@@ -40,7 +40,7 @@ public class TaskService implements CommandLineRunner {
         final ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(queueUrl)
                 .withMaxNumberOfMessages(10);
         final List<Message> messages = amazonSQS.receiveMessage(receiveMessageRequest).getMessages();
-        log.info("Num of messages received {}", messages.size());
+        log.info("Num of messages received of the queue {}: {}", queueUrl, messages.size());
         for (Message messageObject : messages) {
             String message = messageObject.getBody();
             log.info("Received message: " + message);
