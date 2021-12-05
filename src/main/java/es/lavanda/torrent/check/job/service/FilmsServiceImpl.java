@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import es.lavanda.lib.common.model.FilmModelTorrent;
 import es.lavanda.torrent.check.job.exception.TorrentCheckJobException;
 import es.lavanda.torrent.check.job.model.FilmModel;
+import es.lavanda.torrent.check.job.model.FilmModelHistory;
 import es.lavanda.torrent.check.job.model.TorrentCheckedResponse;
+import es.lavanda.torrent.check.job.repository.FilmModelHistoryRepository;
 import es.lavanda.torrent.check.job.repository.FilmModelRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 public class FilmsServiceImpl implements FilmsService {
 
     private final FilmModelRepository filmModelRepository;
+
+    private final FilmModelHistoryRepository filmModelHistoryRepository;
 
     @Override
     public void checkedTorrent(TorrentCheckedResponse torrentChecked) {
@@ -42,6 +46,7 @@ public class FilmsServiceImpl implements FilmsService {
                 } else {
                     save(filmModel);
                 }
+                filmModelHistoryRepository.save(new FilmModelHistory(torrentChecked.getTorrent()));
             }
         }
 
