@@ -31,7 +31,7 @@ public class FilmsServiceImpl implements FilmsService {
             if (Boolean.FALSE.equals(optFilmModel.get().getTorrents().isEmpty())) {
                 FilmModel filmModel = optFilmModel.get();
                 FilmModelTorrent filmModelTorrent = filmModel.getTorrents().stream()
-                        .filter(x -> x.getTorrentUrl().equals(torrentChecked.getTorrent())).findFirst()
+                        .filter(torrent -> torrentChecked.getTorrent().equals(torrent.getTorrentUrl())).findFirst()
                         .orElseThrow(() -> new TorrentCheckJobException(
                                 "Not found torrent on database " + torrentChecked.getTorrent()));
                 if (torrentChecked.isValidate()) {
@@ -49,8 +49,7 @@ public class FilmsServiceImpl implements FilmsService {
                     }
                     filmModelHistoryRepository.save(new FilmModelHistory(torrentChecked.getTorrent()));
                 }
-            }
-            else{
+            } else {
                 filmModelRepository.delete(optFilmModel.get());
             }
         }
